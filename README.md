@@ -25,11 +25,11 @@ wait.sh [[-w | --wait "host:port"] | [[-w | --wait "ls -al /var/www"] | [[-c | -
 
 ```
 $ ./wait.sh --wait "database_host:3306" --wait "ls -al /var/www/html | grep docker-compose.yml" --command "Database is up and files exist"
-$ ./wait.sh --wait "database_host:3306" --wait "database_host2:3306" --command "Databases are up"
+$ ./wait.sh --wait "database_host:3306" --wait "database_host2:3306" --command "echo \"Databases are up\""
 ```
 
 You can set your own timeout with the `-t` or `--timeout=` option.  Setting the timeout value to 0 will disable the delay between requests:
 
 ```
-$ ./wait.sh --wait "database_host:3306" --wait "database_host2:3306" --command "Databases are up" --timeout 15
+$ ./wait.sh --wait "database_host:3306" --wait "database_host2:3306" --command "echo \"Databases are up\"" --timeout 15
 ```
