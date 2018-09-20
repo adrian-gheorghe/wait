@@ -3,7 +3,7 @@
 `wait.sh` is a bash script inspired by https://github.com/vishnubob/wait-for-it and https://github.com/eficode/wait-for
 The script waits for a host or multiple hosts to respond on a TCP port but can also wait for a command to output a value. For example you can wait for a file to exist or contain something.
 
-Like vishnubob's script this is mainly useful to link containers that dependend on one another to start. For example you can have a container that runs install scripts that will have to wait for the database to be accessible.
+The script is mainly useful to link containers that dependend on one another to start. For example you can have a container that runs install scripts that will have to wait for the database to be accessible.
 
 ## Usage
 
@@ -12,7 +12,7 @@ Like vishnubob's script this is mainly useful to link containers that dependend 
 wait.sh [[-w | --wait "host:port"] | [[-w | --wait "ls -al /var/www"] | [[-c | --command "printenv"] | [[-t | --timeout 10] | [-h | --help]]
 -w "HOST:PORT" | --wait "HOST:PORT"             You can specify the HOST and TCP PORT to test 
 -w "ls -al /var/www" | --wait "ls -al /var/www" Alternatively you can specify a bash command that should return something
--c "printenv" | --command "printenv"            Command that should be run when all waits are accessible
+-c "printenv" | --command "printenv"            Command that should be run when all waits are accessible. Multiple commands can be added
 -t TIMEOUT | --timeout=TIMEOUT                  Timeout untill script is killed. Not interval between calls
 -i INTERVAL | --interval=INTERVAL               Interval between calls
 -h | --help                                     Usage / Help

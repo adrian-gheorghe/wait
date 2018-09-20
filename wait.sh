@@ -76,6 +76,7 @@ while [ "$1" != "" ]; do
                                 ;;
         -c | --command )        shift
                                 COMMANDS["$INDEX_COMMAND"]="$1"
+                                let "INDEX_COMMAND++"
                                 ;;
         -t | --timeout )        shift
                                 TIMEOUT="$1"
