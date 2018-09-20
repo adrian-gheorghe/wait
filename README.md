@@ -1,6 +1,6 @@
 ## wait.sh
 
-`wait.sh` is a bash script inspired by https://github.com/vishnubob/wait-for-it 
+`wait.sh` is a bash script inspired by https://github.com/vishnubob/wait-for-it and https://github.com/eficode/wait-for
 The script waits for a host or multiple hosts to respond on a TCP port but can also wait for a command to output a value. For example you can wait for a file to exist or contain something.
 
 Like vishnubob's script this is mainly useful to link containers that dependend on one another to start. For example you can have a container that runs install scripts that will have to wait for the database to be accessible.
