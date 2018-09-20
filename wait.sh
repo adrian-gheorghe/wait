@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-TIMEOUT=300
+TIMEOUT=15
 INDEX=0
 WAITS=()
 cmdname=$(basename $0);
 
 usage()
 {
-    echo "Usage: $cmdname [[-w | --wait \"host:port\"] | [[-w | --wait \"ls -al /var/www\"] | [[-c | --command \"printenv\"] | [[-t | --timeout 10] | [-h | --help]]"
+    echo "Usage: $cmdname [[-w | --wait \"host:port\"] | [[-w | --wait \"ls -al /var/www\"] | [[-c | --command \"printenv\"] | [[-t | --timeout 15] | [-h | --help]]"
     exit 1
 };
 
@@ -33,6 +33,9 @@ process()
         if [[ $result -eq 0 ]]; then
             echo "Host $HOST on $PORT is now accessible"
             DONE=1
+        else
+            echo "Sleeping $TIMEOUT seconds"
+            sleep $TIMEOUT
         fi
         ;;
         * )
@@ -40,6 +43,9 @@ process()
         if [[ $command && ($? -eq 0) ]]; then
             echo "$1 returned $command"
             DONE=1
+         else
+            echo "Sleeping $TIMEOUT seconds"
+            sleep $TIMEOUT
         fi
         ;;
     esac
@@ -79,5 +85,4 @@ while [ "$1" != "" ]; do
     shift
 done
 
-main & read -t $TIMEOUT ;  kill $!
-exit
+main

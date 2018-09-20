@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  db:
+    image: mysql:5.7
+    deploy:
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: database
+  wait:
+    build:
+      context: .
+    command: "./wait.sh --wait \"db:3306\" --command \"ls -al\""
