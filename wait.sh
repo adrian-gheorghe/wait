@@ -2,7 +2,9 @@
 
 TIMEOUT=15
 INDEX=0
+INDEX_COMMAND=0
 WAITS=()
+COMMANDS=()
 cmdname=$(basename $0);
 
 usage()
@@ -34,7 +36,7 @@ process()
             echo "Host $HOST on $PORT is now accessible"
             DONE=1
         else
-            echo "Sleeping $TIMEOUT seconds"
+            echo "Sleeping $TIMEOUT seconds waiting for host"
             sleep $TIMEOUT
         fi
         ;;
@@ -44,7 +46,7 @@ process()
             echo "$1 returned $command"
             DONE=1
          else
-            echo "Sleeping $TIMEOUT seconds"
+            echo "Sleeping $TIMEOUT seconds waiting for command"
             sleep $TIMEOUT
         fi
         ;;
@@ -58,7 +60,10 @@ main()
         waitfor "${WAITS[$i]}"
     done
 
-    $COMMAND
+    for ((i = 0; i < ${#COMMANDS[@]}; i++))
+    do
+        waitfor "${COMMANDS[$i]}"
+    done
     exit 1
 }
 
@@ -70,7 +75,7 @@ while [ "$1" != "" ]; do
                                 let "INDEX++"
                                 ;;
         -c | --command )        shift
-                                COMMAND="$1"
+                                COMMANDS["$INDEX_COMMAND"]="$1"
                                 ;;
         -t | --timeout )        shift
                                 TIMEOUT="$1"
