@@ -62,7 +62,7 @@ main()
 
     for ((i = 0; i < ${#COMMANDS[@]}; i++))
     do
-        "${COMMANDS[$i]}"
+        eval "${COMMANDS[$i]}"
     done
     exit 1
 }
