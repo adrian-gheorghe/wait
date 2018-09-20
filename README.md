@@ -5,9 +5,6 @@ The script waits for a host or multiple hosts to respond on a TCP port but can a
 
 Like vishnubob's script this is mainly useful to link containers that dependend on one another to start. For example you can have a container that runs install scripts that will have to wait for the database to be accessible.
 
-## Requirement
-coreutils needs to be installed
-
 ## Usage
 
 ```
