@@ -5,6 +5,9 @@ The script waits for a host or multiple hosts to respond on a TCP port but can a
 
 The script is mainly useful to link containers that dependend on one another to start. For example you can have a container that runs install scripts that will have to wait for the database to be accessible.
 
+## Requirements
+netcat - The machine / container running wait.sh needs to have the netcat service installed.
+
 ## Usage
 
 ```
@@ -18,7 +21,7 @@ wait.sh [[-w | --wait "host:port"] | [[-w | --wait "ls -al /var/www"] | [[-c | -
 -h | --help                                     Usage / Help
 ```
 
-## Examples
+## Examples shell
 
 ```
 $ ./wait.sh --wait "database_host:3306" --wait "ls -al /var/www/html | grep docker-compose.yml" --command "Database is up and files exist"
@@ -29,4 +32,64 @@ You can set your own timeout with the `-t` or `--timeout=` option.  Setting the 
 
 ```
 $ ./wait.sh --wait "database_host:3306" --wait "database_host2:3306" --command "echo \"Databases are up\"" --timeout 15
+```
+## Examples docker-compose
+
+```
+version: '3.3'
+services:
+  db:
+    image: mysql:5.7
+    deploy:
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: database
+  wait:
+    build:
+      context: .
+    command: "./wait.sh --wait \"db:3306\" --command \"ls -al\""
+    
+```
+
+## Example docker multiple FROM
+
+In the following example the Dockerfile adds the wait.sh file from the adighe/wait container. 
+The setup allows the running of database migrations only after the database is accessible and the volume is mounted
+
+### Dockerfile
+```
+
+FROM adighe/wait as wait
+FROM php:7.1.3-fpm
+
+# Install dependencies
+RUN apt-get update \
+  && apt-get install -y \
+    netcat
+
+RUN curl -sS https://getcomposer.org/installer | php && \
+    mv composer.phar /usr/local/bin/composer
+
+COPY --from=wait /app/wait.sh /app/wait.sh
+
+ENTRYPOINT ["docker-php-entrypoint"]
+CMD ["php-fpm"]
+    
+```
+### docker-compose.yml
+```
+
+version: '3.3'
+services:
+  db:
+    image: mysql:5.7
+    deploy:
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: database
+  install:
+      build:
+        context: .
+      command: "/bin/bash -c \"/app/wait.sh --wait 'db:3306' --wait 'ls -al /var/www/html/ | grep composer.json' --command 'cd /var/www/html' --command 'ls -al' --command 'composer install' --command 'php /var/www/html/bin/console doctrine:migrations:migrate -n -vvv'\""
+
 ```
